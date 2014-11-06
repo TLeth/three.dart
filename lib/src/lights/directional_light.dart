@@ -15,25 +15,29 @@ class DirectionalLight extends ShadowCaster {
 
   Vector3 position;
   Object3D target;
-  num intensity, distance;
+  num intensity;
+  num distance;
 
-  num shadowCameraLeft, shadowCameraRight, shadowCameraTop, shadowCameraBottom;
+  num shadowCameraLeft;
+  num shadowCameraRight;
+  num shadowCameraTop;
+  num shadowCameraBottom;
 
   bool shadowCascade;
 
   Vector3 shadowCascadeOffset;
   num shadowCascadeCount;
 
-  List shadowCascadeBias,
-      shadowCascadeWidth,
-      shadowCascadeHeight,
-      shadowCascadeNearZ,
-      shadowCascadeFarZ,
-      shadowCascadeArray;
+  List shadowCascadeBias;
+  List shadowCascadeWidth;
+  List shadowCascadeHeight;
+  List shadowCascadeNearZ;
+  List shadowCascadeFarZ;
+  List shadowCascadeArray;
 
-  DirectionalLight( num hex, [this.intensity = 1, this.distance = 0]) : super( hex ) {
+  DirectionalLight(num hex, [this.intensity = 1, this.distance = 0]) : super(hex) {
 
-    position = new Vector3( 0.0, 1.0, 0.0 );
+    position = new Vector3(0.0, 1.0, 0.0);
     target = new Object3D();
 
     shadowCameraLeft = -500;
@@ -45,15 +49,15 @@ class DirectionalLight extends ShadowCaster {
 
     shadowCascade = false;
 
-    shadowCascadeOffset = new Vector3( 0.0, 0.0, -1000.0 );
+    shadowCascadeOffset = new Vector3(0.0, 0.0, -1000.0);
     shadowCascadeCount = 2;
 
-    shadowCascadeBias = [ 0, 0, 0 ];
-    shadowCascadeWidth = [ 512, 512, 512 ];
-    shadowCascadeHeight = [ 512, 512, 512 ];
+    shadowCascadeBias = [0, 0, 0];
+    shadowCascadeWidth = [512, 512, 512];
+    shadowCascadeHeight = [512, 512, 512];
 
-    shadowCascadeNearZ = [ -1.000, 0.990, 0.998 ];
-    shadowCascadeFarZ  = [  0.990, 0.998, 1.000 ];
+    shadowCascadeNearZ = [-1.000, 0.990, 0.998];
+    shadowCascadeFarZ = [0.990, 0.998, 1.000];
 
     shadowCascadeArray = [];
 

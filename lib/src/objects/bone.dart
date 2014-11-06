@@ -5,12 +5,14 @@ class Bone extends Object3D {
   var skin;
   Matrix4 skinMatrix;
 
-  Bone(this.skin) : skinMatrix = new Matrix4.identity(), super();
+  Bone(this.skin)
+      : skinMatrix = new Matrix4.identity(),
+        super();
 
-  update( [Matrix4 parentSkinMatrix, forceUpdate = false] ) {
+  update([Matrix4 parentSkinMatrix, forceUpdate = false]) {
 
     // update local
-    if ( matrixAutoUpdate ) {
+    if (matrixAutoUpdate) {
 
       // This should be <=> forceUpdate |= updateMatrix();
       if (forceUpdate) updateMatrix();
@@ -18,9 +20,9 @@ class Bone extends Object3D {
 
     // update skin matrix
 
-    if ( forceUpdate || matrixWorldNeedsUpdate ) {
+    if (forceUpdate || matrixWorldNeedsUpdate) {
 
-      if( parentSkinMatrix != null) {
+      if (parentSkinMatrix != null) {
 
         skinMatrix = parentSkinMatrix * matrix;
 

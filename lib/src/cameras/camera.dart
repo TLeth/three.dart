@@ -17,22 +17,22 @@ class Camera extends Object3D {
   double far;
 
   // WebGL
-  Float32List _viewMatrixArray = new Float32List( 16 );
-  Float32List _projectionMatrixArray = new Float32List( 16 );
+  Float32List _viewMatrixArray = new Float32List(16);
+  Float32List _projectionMatrixArray = new Float32List(16);
 
   Camera(this.near, this.far)
-    : matrixWorldInverse = new Matrix4.identity(),
-      projectionMatrix = new Matrix4.identity(),
-      projectionMatrixInverse = new Matrix4.identity(),
-      super();
+      : matrixWorldInverse = new Matrix4.identity(),
+        projectionMatrix = new Matrix4.identity(),
+        projectionMatrixInverse = new Matrix4.identity(),
+        super();
 
-  void lookAt(Vector3 vector ) {
+  void lookAt(Vector3 vector) {
     // TODO: Add hierarchy support.
 
     makeLookAt(matrix, position, vector, up);
 
-    if ( rotationAutoUpdate ) {
-      rotation = calcEulerFromRotationMatrix( matrix, eulerOrder );
+    if (rotationAutoUpdate) {
+      rotation = calcEulerFromRotationMatrix(matrix, eulerOrder);
     }
   }
 }

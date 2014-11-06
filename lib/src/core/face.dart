@@ -3,15 +3,17 @@ part of three;
 abstract class Face {
   List<int> indices;
   Vector3 normal;
-  List vertexNormals, vertexColors, vertexTangents;
+  List vertexNormals;
+  List vertexColors;
+  List vertexTangents;
   Color color;
   int materialIndex;
   Vector3 centroid;
 
   /// normalOrVertexNormals and colorOrVertexColors can be either a [Vector3] or a [List<Vector3>]
-  Face( this.indices, normalOrVertexNormals, colorOrVertexColors, this.materialIndex ) {
+  Face(this.indices, normalOrVertexNormals, colorOrVertexColors, this.materialIndex) {
 
-    normal = normalOrVertexNormals is Vector3 ? normalOrVertexNormals :  new Vector3.zero();
+    normal = normalOrVertexNormals is Vector3 ? normalOrVertexNormals : new Vector3.zero();
     vertexNormals = normalOrVertexNormals is List ? normalOrVertexNormals : [];
 
     color = colorOrVertexColors is Color ? colorOrVertexColors : new Color();
@@ -26,7 +28,7 @@ abstract class Face {
 
   Face setFrom(Face other) {
     normal.setFrom(other.normal);
-    color.copy( other.color );
+    color.copy(other.color);
     centroid.setFrom(other.centroid);
 
     materialIndex = other.materialIndex;

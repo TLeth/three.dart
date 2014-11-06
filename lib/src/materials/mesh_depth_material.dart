@@ -25,55 +25,13 @@ class MeshDepthMaterial extends Material implements Wireframe {
   // Wireframe
   bool wireframe;
   num wireframeLinewidth;
-  String wireframeLinecap, wireframeLinejoin;
+  String wireframeLinecap;
+  String wireframeLinejoin;
 
-  MeshDepthMaterial( { // MeshDepthMaterial
-                       this.shading: SmoothShading, // doesn't really apply here, normals are not used
-                       this.wireframe: false,
-                       this.wireframeLinewidth: 1,
-
-
-                       // Material
-                       name: '',
-                       side: FrontSide,
-
-                       opacity: 1,
-                       transparent: false,
-
-                       blending: NormalBlending,
-                       blendSrc: SrcAlphaFactor,
-                       blendDst: OneMinusSrcAlphaFactor,
-                       blendEquation: AddEquation,
-
-                       depthTest: true,
-                       depthWrite: true,
-
-                       polygonOffset: false,
-                       polygonOffsetFactor: 0,
-                       polygonOffsetUnits:  0,
-
-                       alphaTest: 0,
-
-                       overdraw: false,
-
-                       visible: true })
-                       :
-
-                         super(  name: name,
-                                 side: side,
-                                 opacity: opacity,
-                                 transparent: transparent,
-                                 blending: blending,
-                                 blendSrc: blendSrc,
-                                 blendDst: blendDst,
-                                 blendEquation: blendEquation,
-                                 depthTest: depthTest,
-                                 depthWrite: depthWrite,
-                                 polygonOffset: polygonOffset,
-                                 polygonOffsetFactor: polygonOffsetFactor,
-                                 polygonOffsetUnits: polygonOffsetUnits,
-                                 alphaTest: alphaTest,
-                                 overdraw: overdraw,
-                                 visible: visible );
+  MeshDepthMaterial({ // MeshDepthMaterial
+  this.shading: SmoothShading, // doesn't really apply here, normals are not used
+  this.wireframe: false, this.wireframeLinewidth: 1, // Material
+  name: '', side: FrontSide, opacity: 1, transparent: false, blending: NormalBlending, blendSrc: SrcAlphaFactor, blendDst: OneMinusSrcAlphaFactor, blendEquation: AddEquation, depthTest: true, depthWrite: true, polygonOffset: false, polygonOffsetFactor: 0, polygonOffsetUnits: 0, alphaTest: 0, overdraw: false, visible: true})
+      : super(name: name, side: side, opacity: opacity, transparent: transparent, blending: blending, blendSrc: blendSrc, blendDst: blendDst, blendEquation: blendEquation, depthTest: depthTest, depthWrite: depthWrite, polygonOffset: polygonOffset, polygonOffsetFactor: polygonOffsetFactor, polygonOffsetUnits: polygonOffsetUnits, alphaTest: alphaTest, overdraw: overdraw, visible: visible);
 
 }

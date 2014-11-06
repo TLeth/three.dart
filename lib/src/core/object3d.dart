@@ -22,24 +22,37 @@ class Object3D {
   Object3D parent;
   List children;
 
-  Vector3 up, position, rotation, scale;
+  Vector3 up;
+  Vector3 position;
+  Vector3 rotation;
+  Vector3 scale;
 
   String eulerOrder;
 
-  bool _dynamic, doubleSided, flipSided, rotationAutoUpdate;
+  bool _dynamic;
+  bool doubleSided;
+  bool flipSided;
+  bool rotationAutoUpdate;
 
   int renderDepth;
 
-  Matrix4 matrix, matrixWorld, matrixRotationWorld;
+  Matrix4 matrix;
+  Matrix4 matrixWorld;
+  Matrix4 matrixRotationWorld;
 
-  bool matrixAutoUpdate = false, matrixWorldNeedsUpdate = false;
+  bool matrixAutoUpdate = false;
+  bool matrixWorldNeedsUpdate = false;
 
   var quaternion;
   bool useQuaternion;
 
-  num boundRadius, boundRadiusScale;
+  num boundRadius;
+  num boundRadiusScale;
 
-  bool visible = false, castShadow = false, receiveShadow = false, frustumCulled = false;
+  bool visible = false;
+  bool castShadow = false;
+  bool receiveShadow = false;
+  bool frustumCulled = false;
 
   Vector3 _vector;
 
@@ -60,9 +73,18 @@ class Object3D {
   Matrix3 _normalMatrix;
 
   int count;
-  bool hasPositions, hasNormals, hasUvs, hasColors;
-  var positionArray, normalArray, uvArray, colorArray;
-  gl.Buffer __webglVertexBuffer, __webglNormalBuffer, __webglUVBuffer, __webglColorBuffer;
+  bool hasPositions;
+  bool hasNormals;
+  bool hasUvs;
+  bool hasColors;
+  var positionArray;
+  var normalArray;
+  var uvArray;
+  var colorArray;
+  gl.Buffer __webglVertexBuffer;
+  gl.Buffer __webglNormalBuffer;
+  gl.Buffer __webglUVBuffer;
+  gl.Buffer __webglColorBuffer;
 
   var __webglMorphTargetInfluences;
 
@@ -75,12 +97,12 @@ class Object3D {
         parent = null,
         children = [],
 
-        up = new Vector3( 0.0, 1.0, 0.0),
+        up = new Vector3(0.0, 1.0, 0.0),
 
         position = new Vector3(0.0, 0.0, 0.0),
         rotation = new Vector3(0.0, 0.0, 0.0),
         eulerOrder = 'XYZ',
-        scale = new Vector3( 1.0, 1.0, 1.0 ),
+        scale = new Vector3(1.0, 1.0, 1.0),
 
         renderDepth = null,
 
@@ -108,84 +130,81 @@ class Object3D {
 
         _vector = new Vector3.zero();
 
-        // TODO - These are not in three.js
-        //_dynamic = false, // when true it retains arrays so they can be updated with __dirty*
+  // TODO - These are not in three.js
+  //_dynamic = false, // when true it retains arrays so they can be updated with __dirty*
 
-        //doubleSided = false,
-        //flipSided = false,
+  //doubleSided = false,
+  //flipSided = false,
 
   // dynamic
   bool get isDynamic => _dynamic;
-       set isDynamic(bool flag) => _dynamic = flag;
+  set isDynamic(bool flag) => _dynamic = flag;
 
-  void applyMatrix ( Matrix4 matrix ) {
+  void applyMatrix(Matrix4 matrix) {
     this.matrix = matrix * this.matrix;
 
-    this.scale = getScaleFromMatrix( this.matrix );
+    this.scale = getScaleFromMatrix(this.matrix);
 
-    Matrix4 mat = extractRotation(new Matrix4.identity(), this.matrix );
-    this.rotation = calcEulerFromRotationMatrix( mat, this.eulerOrder );
+    Matrix4 mat = extractRotation(new Matrix4.identity(), this.matrix);
+    this.rotation = calcEulerFromRotationMatrix(mat, this.eulerOrder);
 
     this.position = this.matrix.getTranslation();
   }
 
-  void translate( double distance, Vector3 axis ) {
-    matrix.rotate3( axis );
+  void translate(double distance, Vector3 axis) {
+    matrix.rotate3(axis);
     axis.normalize();
-    position.add( axis.scale( distance ) );
+    position.add(axis.scale(distance));
   }
 
-  void translateX( double distance ) => translate( distance, _vector.setValues( 1.0, 0.0, 0.0 ) );
+  void translateX(double distance) => translate(distance, _vector.setValues(1.0, 0.0, 0.0));
 
-  void translateY( double distance ) => translate( distance, _vector.setValues( 0.0, 1.0, 0.0 ) );
+  void translateY(double distance) => translate(distance, _vector.setValues(0.0, 1.0, 0.0));
 
-  void translateZ( double distance ) => translate( distance, _vector.setValues( 0.0, 0.0, 1.0 ) );
+  void translateZ(double distance) => translate(distance, _vector.setValues(0.0, 0.0, 1.0));
 
-  void lookAt( Vector3 vector ) {
+  void lookAt(Vector3 vector) {
     // TODO: Add hierarchy support.
 
-    makeLookAt( matrix, vector, position, up );
+    makeLookAt(matrix, vector, position, up);
 
-    if ( rotationAutoUpdate ) {
-      if(useQuaternion)
-        quaternion.setFromRotationMatrix(matrix);
-      else
-        rotation = calcEulerFromRotationMatrix( matrix, eulerOrder );
+    if (rotationAutoUpdate) {
+      if (useQuaternion) quaternion.setFromRotationMatrix(matrix); else rotation = calcEulerFromRotationMatrix(matrix, eulerOrder);
     }
   }
 
-  void add( Object3D object ) {
-    if ( object == this ) {
-      print( 'THREE.Object3D.add: An object can\'t be added as a child of itself.' );
+  void add(Object3D object) {
+    if (object == this) {
+      print('THREE.Object3D.add: An object can\'t be added as a child of itself.');
       return;
     }
 
 
-    if ( object.parent != null ) {
-      object.parent.remove( object );
+    if (object.parent != null) {
+      object.parent.remove(object);
     }
 
     object.parent = this;
-    children.add( object );
+    children.add(object);
 
     // add to scene
     Object3D scene = this;
 
-    while ( scene.parent != null ) {
+    while (scene.parent != null) {
       scene = scene.parent;
     }
 
-    if ( scene is Scene ) {
-      (scene as Scene).addObject( object );
+    if (scene is Scene) {
+      (scene as Scene).addObject(object);
     }
 
   }
 
-  void remove( Object3D object ) {
+  void remove(Object3D object) {
 
-    int index = children.indexOf( object );
+    int index = children.indexOf(object);
 
-    if ( index != - 1 ){
+    if (index != -1) {
 
       object.parent = null;
       children.removeAt(index);
@@ -193,31 +212,32 @@ class Object3D {
       // remove from scene
       Object3D obj = this;
 
-      while ( obj.parent != null ) {
+      while (obj.parent != null) {
         obj = obj.parent;
       }
 
-      if (obj is Scene ) {
-        (obj as Scene).removeObject( object );
+      if (obj is Scene) {
+        (obj as Scene).removeObject(object);
       }
     }
   }
 
-  Object3D getChildByName( String name, bool doRecurse ) {
+  Object3D getChildByName(String name, bool doRecurse) {
     int c;
     int cl = children.length;
-    Object3D child, recurseResult;
+    Object3D child;
+    Object3D recurseResult;
 
-    children.forEach((child){
+    children.forEach((child) {
 
-      if ( child.name == name ) {
+      if (child.name == name) {
         return child;
       }
 
-      if ( doRecurse ) {
-        recurseResult = child.getChildByName( name, doRecurse );
+      if (doRecurse) {
+        recurseResult = child.getChildByName(name, doRecurse);
 
-        if ( recurseResult != null ) {
+        if (recurseResult != null) {
           return recurseResult;
         }
       }
@@ -228,29 +248,29 @@ class Object3D {
 
   void updateMatrix() {
 
-    if ( useQuaternion ) {
-      setRotationFromQuaternion( matrix, quaternion );
+    if (useQuaternion) {
+      setRotationFromQuaternion(matrix, quaternion);
     } else {
-      setRotationFromEuler( matrix, rotation, eulerOrder );
+      setRotationFromEuler(matrix, rotation, eulerOrder);
     }
 
-    matrix.setTranslation( position );
+    matrix.setTranslation(position);
 
-    if ( scale.x != 1.0 || scale.y != 1.0 || scale.z != 1.0 ) {
-      matrix.scale( scale );
-      boundRadiusScale = Math.max( scale.x, Math.max( scale.y, scale.z ) );
+    if (scale.x != 1.0 || scale.y != 1.0 || scale.z != 1.0) {
+      matrix.scale(scale);
+      boundRadiusScale = Math.max(scale.x, Math.max(scale.y, scale.z));
     }
 
     matrixWorldNeedsUpdate = true;
   }
 
-  void updateMatrixWorld( {bool force: false} ) {
+  void updateMatrixWorld({bool force: false}) {
 
-   if (matrixAutoUpdate) updateMatrix();
+    if (matrixAutoUpdate) updateMatrix();
 
     // update matrixWorld
-    if ( matrixWorldNeedsUpdate || force ) {
-      if ( parent != null ) {
+    if (matrixWorldNeedsUpdate || force) {
+      if (parent != null) {
         matrixWorld = parent.matrixWorld * matrix;
       } else {
         matrixWorld = matrix.clone();
@@ -262,14 +282,14 @@ class Object3D {
     }
 
     // update children
-    children.forEach((c) => c.updateMatrixWorld( force: force ) );
+    children.forEach((c) => c.updateMatrixWorld(force: force));
 
   }
 
   worldToLocal(Vector3 vector) {
     Matrix4 m = this.matrixWorld.clone();
     m.invert();
-    m.transform3( vector );
+    m.transform3(vector);
   }
 
   localToWorld(Vector3 vector) => vector.applyProjection(matrixWorld);

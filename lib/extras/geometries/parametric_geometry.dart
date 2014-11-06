@@ -11,60 +11,70 @@ part of three;
 
 class ParametricGeometry extends Geometry {
 
-  ParametricGeometry( func(u, v), int slices, int stacks, [bool useTris = false] ) : super() {
+  ParametricGeometry(func(u, v), int slices, int stacks, [bool useTris = false]) : super() {
     var verts = this.vertices;
     var faces = this.faces;
-    var uvs = this.faceVertexUvs[ 0 ];
+    var uvs = this.faceVertexUvs[0];
 
-    var i, il, j, p;
-    var u, v;
+    var i;
+    var p;
+    var j;
+    var il;
+    var u;
+    var v;
 
     var stackCount = stacks + 1;
     var sliceCount = slices + 1;
 
-    for ( i = 0; i <= stacks; i ++ ) {
+    for (i = 0; i <= stacks; i++) {
 
       v = i / stacks;
 
-      for ( j = 0; j <= slices; j ++ ) {
+      for (j = 0; j <= slices; j++) {
 
         u = j / slices;
 
-        p = func( u, v );
-        verts.add( p );
+        p = func(u, v);
+        verts.add(p);
 
       }
     }
 
-    var a, b, c, d;
-    var uva, uvb, uvc, uvd;
+    var a;
+    var d;
+    var c;
+    var b;
+    var uva;
+    var uvd;
+    var uvc;
+    var uvb;
 
-    for ( i = 0; i < stacks; i ++ ) {
+    for (i = 0; i < stacks; i++) {
 
-      for ( j = 0; j < slices; j ++ ) {
+      for (j = 0; j < slices; j++) {
 
         a = i * sliceCount + j;
         b = i * sliceCount + j + 1;
         c = (i + 1) * sliceCount + j;
         d = (i + 1) * sliceCount + j + 1;
 
-        uva = new UV( j / slices, i / stacks );
-        uvb = new UV( ( j + 1 ) / slices, i / stacks );
-        uvc = new UV( j / slices, ( i + 1 ) / stacks );
-        uvd = new UV( ( j + 1 ) / slices, ( i + 1 ) / stacks );
+        uva = new UV(j / slices, i / stacks);
+        uvb = new UV((j + 1) / slices, i / stacks);
+        uvc = new UV(j / slices, (i + 1) / stacks);
+        uvd = new UV((j + 1) / slices, (i + 1) / stacks);
 
-        if ( useTris ) {
+        if (useTris) {
 
-          faces.add( new Face3( a, b, c ) );
-          faces.add( new Face3( b, d, c ) );
+          faces.add(new Face3(a, b, c));
+          faces.add(new Face3(b, d, c));
 
-          uvs.add( [ uva, uvb, uvc ] );
-          uvs.add( [ uvb, uvd, uvc ] );
+          uvs.add([uva, uvb, uvc]);
+          uvs.add([uvb, uvd, uvc]);
 
         } else {
 
-          faces.add( new Face4( a, b, d, c ) );
-          uvs.add( [ uva, uvb, uvd, uvc ] );
+          faces.add(new Face4(a, b, d, c));
+          uvs.add([uva, uvb, uvd, uvc]);
 
         }
 

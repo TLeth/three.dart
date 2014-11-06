@@ -33,14 +33,9 @@ part of three;
  * }
  */
 
-class MeshBasicMaterial extends Material
-  implements TextureMapping,
-             EnvironmentMapping,
-             Skinning,
-             Morphing,
-             Wireframe {
+class MeshBasicMaterial extends Material implements TextureMapping, EnvironmentMapping, Skinning, Morphing, Wireframe {
 
- Texture map;
+  Texture map;
   Texture lightMap;
   Texture specularMap;
   var envMap; // TextureCube?
@@ -51,84 +46,22 @@ class MeshBasicMaterial extends Material
   int shading;
   bool wireframe;
   num wireframeLinewidth;
-  String wireframeLinecap, wireframeLinejoin;
+  String wireframeLinecap;
+  String wireframeLinejoin;
 
   bool skinning;
 
-  bool morphTargets, morphNormals = false;
-  num numSupportedMorphTargets = 0, numSupportedMorphNormals = 0;
+  bool morphTargets;
+  bool morphNormals = false;
+  num numSupportedMorphTargets = 0;
+  num numSupportedMorphNormals = 0;
 
-  MeshBasicMaterial( { // MeshBasicMaterial
+  MeshBasicMaterial({ // MeshBasicMaterial
 
-                       this.map,
+  this.map, num color: 0xffffff, //emissive
 
-                       num color: 0xffffff, //emissive
-
-                       this.lightMap,
-                       this.specularMap,
-
-                       this.envMap,
-                       this.combine: MultiplyOperation,
-                       this.reflectivity: 1,
-                       this.refractionRatio: 0.98,
-
-                       this.shading: SmoothShading,
-
-                       int vertexColors: NoColors,
-
-                       bool fog: true,
-
-                       this.wireframe: false,
-                       this.wireframeLinewidth: 1,
-                       this.wireframeLinecap: 'round',
-                       this.wireframeLinejoin: 'round',
-
-                       this.skinning: false,
-                       this.morphTargets: false,
-
-                       // Material
-                       name: '',
-                       side: FrontSide,
-
-                       opacity: 1,
-                       transparent: false,
-
-                       blending: NormalBlending,
-                       blendSrc: SrcAlphaFactor,
-                       blendDst: OneMinusSrcAlphaFactor,
-                       blendEquation: AddEquation,
-
-                       depthTest: true,
-                       depthWrite: true,
-
-                       polygonOffset: false,
-                       polygonOffsetFactor: 0,
-                       polygonOffsetUnits: 0,
-
-                       alphaTest: 0,
-
-                       overdraw: false,
-
-                       visible: true })
-                       :
-                         super(  name: name,
-                                 side: side,
-                                 opacity: opacity,
-                                 transparent: transparent,
-                                 blending: blending,
-                                 blendSrc: blendSrc,
-                                 blendDst: blendDst,
-                                 blendEquation: blendEquation,
-                                 depthTest: depthTest,
-                                 depthWrite: depthWrite,
-                                 polygonOffset: polygonOffset,
-                                 polygonOffsetFactor: polygonOffsetFactor,
-                                 polygonOffsetUnits: polygonOffsetUnits,
-                                 alphaTest: alphaTest,
-                                 overdraw: overdraw,
-                                 visible: visible,
-                                 color: color,
-                                 fog: fog,
-                                 vertexColors: vertexColors);
+  this.lightMap, this.specularMap, this.envMap, this.combine: MultiplyOperation, this.reflectivity: 1, this.refractionRatio: 0.98, this.shading: SmoothShading, int vertexColors: NoColors, bool fog: true, this.wireframe: false, this.wireframeLinewidth: 1, this.wireframeLinecap: 'round', this.wireframeLinejoin: 'round', this.skinning: false, this.morphTargets: false, // Material
+  name: '', side: FrontSide, opacity: 1, transparent: false, blending: NormalBlending, blendSrc: SrcAlphaFactor, blendDst: OneMinusSrcAlphaFactor, blendEquation: AddEquation, depthTest: true, depthWrite: true, polygonOffset: false, polygonOffsetFactor: 0, polygonOffsetUnits: 0, alphaTest: 0, overdraw: false, visible: true})
+      : super(name: name, side: side, opacity: opacity, transparent: transparent, blending: blending, blendSrc: blendSrc, blendDst: blendDst, blendEquation: blendEquation, depthTest: depthTest, depthWrite: depthWrite, polygonOffset: polygonOffset, polygonOffsetFactor: polygonOffsetFactor, polygonOffsetUnits: polygonOffsetUnits, alphaTest: alphaTest, overdraw: overdraw, visible: visible, color: color, fog: fog, vertexColors: vertexColors);
 
 }

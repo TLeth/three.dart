@@ -22,11 +22,7 @@ class ShapeGeometry extends Geometry {
 
   var shapebb;
 
-  ShapeGeometry( this.shapes,
-                  {
-                    curveSegments: 12,
-                    material,
-                    ExtrudeGeometryWorldUVGenerator UVGenerator } ) : super() {
+  ShapeGeometry(this.shapes, {curveSegments: 12, material, ExtrudeGeometryWorldUVGenerator UVGenerator}) : super() {
 
     if (shapes == null) {
       shapes = [];
@@ -35,8 +31,7 @@ class ShapeGeometry extends Geometry {
 
     shapebb = shapes.last.getBoundingBox();
 
-    addShapeList( shapes,
-      curveSegments, material, UVGenerator );
+    addShapeList(shapes, curveSegments, material, UVGenerator);
 
     computeCentroids();
     computeFaceNormals();
@@ -45,43 +40,45 @@ class ShapeGeometry extends Geometry {
 
 
 
-  addShapeList(shapes, curveSegments, material, [ ExtrudeGeometryWorldUVGenerator UVGenerator = null ] ) {
+  addShapeList(shapes, curveSegments, material, [ExtrudeGeometryWorldUVGenerator UVGenerator = null]) {
     var sl = shapes.length;
 
-    for ( var s = 0; s < sl; s ++ ) {
-      var shape = shapes[ s ];
-      addShape( shape, curveSegments, material, UVGenerator );
+    for (var s = 0; s < sl; s++) {
+      var shape = shapes[s];
+      addShape(shape, curveSegments, material, UVGenerator);
     }
   }
 
-  addShape( Shape shape, curveSegments, material, [ ExtrudeGeometryWorldUVGenerator UVGenerator = null ] ) {
+  addShape(Shape shape, curveSegments, material, [ExtrudeGeometryWorldUVGenerator UVGenerator = null]) {
 
     // set UV generator
-    var uvgen = (UVGenerator!= null) ? UVGenerator : new ExtrudeGeometryWorldUVGenerator();
+    var uvgen = (UVGenerator != null) ? UVGenerator : new ExtrudeGeometryWorldUVGenerator();
 
-    var i, hole, s;
+    var i;
+    var s;
+    var hole;
 
     var shapesOffset = this.vertices.length;
-    var shapePoints = shape.extractPoints( curveSegments );
+    var shapePoints = shape.extractPoints(curveSegments);
 
     List vertices = shapePoints["shape"];
     List<List<Vector2>> holes = shapePoints["holes"];
 
-    var reverse = !ShapeUtils.isClockWise( vertices );
+    var reverse = !ShapeUtils.isClockWise(vertices);
 
-    if ( reverse ) {
+    if (reverse) {
 
       vertices = vertices.reversed.toList();
 
       // Maybe we should also check if holes are in the opposite direction, just to be safe...
 
-      for ( i = 0; i < holes.length; i++ ) {
+      for (i = 0; i < holes.length; i++) {
 
-        hole = holes[ i ];
+        hole = holes[i];
 
-        if ( ShapeUtils.isClockWise( hole ) ) {
+        if (ShapeUtils.isClockWise(hole)) {
 
-          holes[ i ] = hole.reversed.toList();
+          holes[i] = hole.reversed.toList();
 
         }
 
@@ -91,45 +88,50 @@ class ShapeGeometry extends Geometry {
 
     }
 
-    var faces = ShapeUtils.triangulateShape( vertices, holes );
+    var faces = ShapeUtils.triangulateShape(vertices, holes);
 
     // Vertices
 
     var contour = vertices;
 
-    for ( i = 0; i < holes.length; i++ ) {
+    for (i = 0; i < holes.length; i++) {
 
-      hole = holes[ i ];
+      hole = holes[i];
 
       vertices = new List.from(vertices);
-      vertices.addAll( hole );
+      vertices.addAll(hole);
 
     }
 
     //
 
-    var vert, vlen = vertices.length;
-    var face, flen = faces.length;
-    var cont, clen = contour.length;
+    var vert;
+    //
 
-    for ( i = 0; i < vlen; i++ ) {
+    var vlen = vertices.length;
+    var face;
+    var flen = faces.length;
+    var cont;
+    var clen = contour.length;
 
-      vert = vertices[ i ];
+    for (i = 0; i < vlen; i++) {
 
-      this.vertices.add( new Vector3( (vert.x).toDouble(), (vert.y).toDouble(), 0.0 ) );
+      vert = vertices[i];
+
+      this.vertices.add(new Vector3((vert.x).toDouble(), (vert.y).toDouble(), 0.0));
 
     }
 
-    for ( i = 0; i < flen; i++ ) {
+    for (i = 0; i < flen; i++) {
 
-      face = faces[ i ];
+      face = faces[i];
 
-      var a = face[ 0 ] + shapesOffset;
-      var b = face[ 1 ] + shapesOffset;
-      var c = face[ 2 ] + shapesOffset;
+      var a = face[0] + shapesOffset;
+      var b = face[1] + shapesOffset;
+      var c = face[2] + shapesOffset;
 
-      this.faces.add( new Face3( a, b, c, null, null, material ) );
-      faceVertexUvs[ 0 ].add( uvgen.generateBottomUV( this, shape, null, a, b, c ) );
+      this.faces.add(new Face3(a, b, c, null, null, material));
+      faceVertexUvs[0].add(uvgen.generateBottomUV(this, shape, null, a, b, c));
 
     }
   }

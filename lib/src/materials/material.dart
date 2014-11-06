@@ -16,11 +16,18 @@ class Material {
   Color color;
 
   num opacity;
-  int blending, blendSrc, blendDst, blendEquation;
+  int blending;
+  int blendSrc;
+  int blendDst;
+  int blendEquation;
   num alphaTest;
   bool polygonOffset;
-  int polygonOffsetFactor, polygonOffsetUnits;
-  bool transparent, depthTest, depthWrite, overdraw;
+  int polygonOffsetFactor;
+  int polygonOffsetUnits;
+  bool transparent;
+  bool depthTest;
+  bool depthWrite;
+  bool overdraw;
   bool visible;
 
   bool needsUpdate = true;
@@ -39,39 +46,11 @@ class Material {
   // Used by ShadowMapPlugin
   bool shadowPass = false;
 
-  Material( { this.name: '',
-              this.side: FrontSide,
+  Material({this.name: '', this.side: FrontSide, this.opacity: 1, this.transparent: false, this.blending: NormalBlending, this.blendSrc: SrcAlphaFactor, this.blendDst: OneMinusSrcAlphaFactor, this.blendEquation: AddEquation, this.depthTest: true, this.depthWrite: true, this.polygonOffset: false, this.polygonOffsetFactor: 0, this.polygonOffsetUnits: 0, this.alphaTest: 0, num color, this.overdraw: false, // Boolean for fixing antialiasing gaps in CanvasRenderer
 
-              this.opacity: 1,
-              this.transparent: false,
-
-              this.blending: NormalBlending,
-              this.blendSrc: SrcAlphaFactor,
-              this.blendDst: OneMinusSrcAlphaFactor,
-              this.blendEquation: AddEquation,
-
-              this.depthTest: true,
-              this.depthWrite: true,
-
-              this.polygonOffset: false,
-              this.polygonOffsetFactor: 0,
-              this.polygonOffsetUnits:  0,
-
-              this.alphaTest: 0,
-
-              num color,
-
-              this.overdraw: false, // Boolean for fixing antialiasing gaps in CanvasRenderer
-
-              this.visible: true,
-
-              this.fog: false,
-
-              this.vertexColors: NoColors})
-      :
-
-            id = MaterialCount ++,
-            this.color = new Color(color);
+  this.visible: true, this.fog: false, this.vertexColors: NoColors})
+      : id = MaterialCount++,
+        this.color = new Color(color);
 
 /*
   THREE.MaterialCount = 0;
@@ -104,7 +83,8 @@ abstract class EnvironmentMapping {
   Texture specularMap;
   Texture lightMap;
 
-  double reflectivity, refractionRatio;
+  double reflectivity;
+  double refractionRatio;
 
   /// How to combine the result of the surface's color with the environment map, if any
   int combine;
@@ -131,8 +111,10 @@ abstract class Lighting {
 
 /** [Material] that uses skinning **/
 abstract class Morphing {
-  bool morphTargets = false, morphNormals = false;
-  num numSupportedMorphTargets = 0, numSupportedMorphNormals = 0;
+  bool morphTargets = false;
+  bool morphNormals = false;
+  num numSupportedMorphTargets = 0;
+  num numSupportedMorphNormals = 0;
 }
 
 abstract class Skinning {
@@ -142,5 +124,6 @@ abstract class Skinning {
 abstract class Wireframe {
   bool wireframe;
   num wireframeLinewidth;
-  String wireframeLinecap, wireframeLinejoin;
+  String wireframeLinecap;
+  String wireframeLinejoin;
 }

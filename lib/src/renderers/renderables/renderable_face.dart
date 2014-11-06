@@ -3,26 +3,29 @@ part of three;
 class RenderableFace implements IRenderable {
   List<RenderableVertex> vertices;
 
-  Vector3 centroidWorld, centroidScreen, normalWorld;
+  Vector3 centroidWorld;
+  Vector3 centroidScreen;
+  Vector3 normalWorld;
 
-  List vertexNormalsWorld, uvs;
+  List vertexNormalsWorld;
+  List uvs;
 
   Material material;
   Material faceMaterial;
 
   num z;
 
-  RenderableFace(int size) :
-    centroidWorld = new Vector3.zero(),
-    centroidScreen = new Vector3.zero(),
+  RenderableFace(int size)
+      : centroidWorld = new Vector3.zero(),
+        centroidScreen = new Vector3.zero(),
 
-    normalWorld = new Vector3.zero(),
-    vertexNormalsWorld = [ new Vector3.zero(), new Vector3.zero(), new Vector3.zero(), new Vector3.zero() ],
+        normalWorld = new Vector3.zero(),
+        vertexNormalsWorld = [new Vector3.zero(), new Vector3.zero(), new Vector3.zero(), new Vector3.zero()],
 
-    material = null,
-    uvs = [[]],
+        material = null,
+        uvs = [[]],
 
-    z = null {
+        z = null {
     vertices = new List.generate(size, (_) => new RenderableVertex(), growable: false);
   }
 }

@@ -12,25 +12,44 @@ part of three;
 class ImageList extends Object with ListMixin<ImageElement> {
   int loadCount;
   List<ImageElement> _images;
-  Map<String,dynamic> props;
+  Map<String, dynamic> props;
 
   // WebGL
   var webglTextureCube;
 
-  ImageList(size): props = {},_images = new List<ImageElement>(size);
+  ImageList(size)
+      : props = {},
+        _images = new List<ImageElement>(size);
 
   ImageElement operator [](int index) => _images[index];
-  void operator []=(int index, ImageElement img) { _images[index] = img; }
+  void operator []=(int index, ImageElement img) {
+    _images[index] = img;
+  }
   int get length => _images.length;
-  void set length(int size) { _images.length = size; }
+  void set length(int size) {
+    _images.length = size;
+  }
 }
 
 class Texture {
   int id;
   var image;
   var mapping; //UVMapping appears to be missing..
-  int wrapS, wrapT, magFilter, minFilter, format, type, anisotropy;
-  Vector2 offset, repeat;
+  int wrapS;
+  //UVMapping appears to be missing..
+  int wrapT;
+  //UVMapping appears to be missing..
+  int magFilter;
+  //UVMapping appears to be missing..
+  int minFilter;
+  //UVMapping appears to be missing..
+  int format;
+  //UVMapping appears to be missing..
+  int type;
+  //UVMapping appears to be missing..
+  int anisotropy;
+  Vector2 offset;
+  Vector2 repeat;
   bool generateMipmaps;
   bool premultiplyAlpha;
 
@@ -47,22 +66,13 @@ class Texture {
   var __webglTexture;
 
   //TODO: resolve dynamic vars, find out what UVMapping is!
-  Texture( [  this.image,
-              this.mapping = null,
-              this.wrapS = ClampToEdgeWrapping,
-              this.wrapT = ClampToEdgeWrapping,
-              this.magFilter = LinearFilter,
-              this.minFilter = LinearMipMapLinearFilter,
-              this.format = RGBAFormat,
-              this.type = UnsignedByteType,
-              this.anisotropy = 1] )
-  {
-    id = TextureCount ++;
+  Texture([this.image, this.mapping = null, this.wrapS = ClampToEdgeWrapping, this.wrapT = ClampToEdgeWrapping, this.magFilter = LinearFilter, this.minFilter = LinearMipMapLinearFilter, this.format = RGBAFormat, this.type = UnsignedByteType, this.anisotropy = 1]) {
+    id = TextureCount++;
 
     this.mapping = mapping != null ? mapping : new UVMapping();
 
     offset = new Vector2.zero();
-    repeat = new Vector2( 1.0, 1.0 );
+    repeat = new Vector2(1.0, 1.0);
 
     generateMipmaps = true;
     premultiplyAlpha = false;
@@ -73,11 +83,11 @@ class Texture {
   }
 
   Texture clone() {
-    Texture clonedTexture = new Texture( image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy );
+    Texture clonedTexture = new Texture(image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy);
 
-    clonedTexture.mipmaps = new List.from( mipmaps );
-    clonedTexture.offset.setFrom( offset );
-    clonedTexture.repeat.setFrom( repeat );
+    clonedTexture.mipmaps = new List.from(mipmaps);
+    clonedTexture.offset.setFrom(offset);
+    clonedTexture.repeat.setFrom(repeat);
 
     return clonedTexture;
   }
@@ -92,6 +102,6 @@ class Texture {
     return __data;
   }
 
-  operator [] (String key) => _data[key];
-  operator []= (String key, value) => _data[key] = value;
+  operator [](String key) => _data[key];
+  operator []=(String key, value) => _data[key] = value;
 }

@@ -12,9 +12,7 @@ class OBJLoader extends Loader {
 
   OBJLoader() : super();
 
-  Future<Object3D> load(url) =>
-      HttpRequest.request(url, responseType: "String")
-      .then((req) => _parse(req.response));
+  Future<Object3D> load(url) => HttpRequest.request(url, responseType: "String").then((req) => _parse(req.response));
 
   _parseIndex(vertices, index) {
     index = int.parse(index);
@@ -22,33 +20,21 @@ class OBJLoader extends Loader {
   }
 
   _create_face(a, b, c, vertices, [normals, normals_inds = null]) {
-    var face = new Face3(
-        vertices[_parseIndex(vertices, a)] - 1,
-        vertices[_parseIndex(vertices, b)] - 1,
-        vertices[_parseIndex(vertices, c)] - 1);
+    var face = new Face3(vertices[_parseIndex(vertices, a)] - 1, vertices[_parseIndex(vertices, b)] - 1, vertices[_parseIndex(vertices, c)] - 1);
 
-    if ( normals_inds != null ) {
-      face.vertexNormals = [
-          normals[_parseIndex(normals, normals_inds[ 0 ])],
-          normals[_parseIndex(normals, normals_inds[ 1 ])],
-          normals[_parseIndex(normals, normals_inds[ 2 ])]
-      ];
+    if (normals_inds != null) {
+      face.vertexNormals = [normals[_parseIndex(normals, normals_inds[0])], normals[_parseIndex(normals, normals_inds[1])], normals[_parseIndex(normals, normals_inds[2])]];
     }
     return face;
   }
 
-  _create_uvs(uvs, a, b, c) =>
-      [
-        uvs[_parseIndex(uvs, a)],
-        uvs[_parseIndex(uvs, b)],
-        uvs[_parseIndex(uvs, c)]
-      ];
+  _create_uvs(uvs, a, b, c) => [uvs[_parseIndex(uvs, a)], uvs[_parseIndex(uvs, b)], uvs[_parseIndex(uvs, c)]];
 
   _handle_face_line(geometry, vertices, normals, uvs, faces, [uvsLine = null, normals_inds = null]) {
-    if (faces[ 3 ] == null)  {
+    if (faces[3] == null) {
       geometry.faces.add(_create_face(faces[0], faces[1], faces[2], vertices, normals, normals_inds));
       if (uvsLine != null && uvsLine.length > 0) {
-        geometry.faceVertexUvs[0].add(_create_uvs(uvs, uvsLine[0], uvsLine[1], uvsLine[2] ));
+        geometry.faceVertexUvs[0].add(_create_uvs(uvs, uvsLine[0], uvsLine[1], uvsLine[2]));
       }
     } else {
       if (normals_inds != null && normals_inds.length > 0) {
@@ -70,7 +56,9 @@ class OBJLoader extends Loader {
 
     var object = new Object3D();
 
-    var geometry, material, mesh;
+    var geometry;
+    var mesh;
+    var material;
 
     // create mesh if no objects in text
 
@@ -122,7 +110,7 @@ class OBJLoader extends Loader {
         } else if ((result = normal_pattern.firstMatch(line)) != null) {
 
           // ["vn 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
-          normals.add( new Vector3(double.parse(result[1]), double.parse(result[2]), double.parse(result[3])));
+          normals.add(new Vector3(double.parse(result[1]), double.parse(result[2]), double.parse(result[3])));
 
         } else if ((result = uv_pattern.firstMatch(line)) != null) {
 
@@ -132,39 +120,29 @@ class OBJLoader extends Loader {
         } else if ((result = face_pattern1.firstMatch(line)) != null) {
 
           // ["f 1 2 3", "1", "2", "3", undefined]
-          _handle_face_line(
-              geometry, vertices, normals, uvs,
-              [result[1], result[2], result[3], result[4]]
-          );
+          _handle_face_line(geometry, vertices, normals, uvs, [result[1], result[2], result[3], result[4]]);
 
 
         } else if ((result = face_pattern2.firstMatch(line)) != null) {
 
           // ["f 1/1 2/2 3/3", " 1/1", "1", "1", " 2/2", "2", "2", " 3/3", "3", "3", undefined, undefined, undefined]
-          _handle_face_line(
-              geometry, vertices, normals, uvs,
-              [result[2], result[5], result[8], result[11]], //faces
-              [result[3], result[6], result[9], result[12]] //uv
+          _handle_face_line(geometry, vertices, normals, uvs, [result[2], result[5], result[8], result[11]], //faces
+          [result[3], result[6], result[9], result[12]] //uv
           );
 
         } else if ((result = face_pattern3.firstMatch(line)) != null) {
 
           // ["f 1/1/1 2/2/2 3/3/3", " 1/1/1", "1", "1", "1", " 2/2/2", "2", "2", "2", " 3/3/3", "3", "3", "3", undefined, undefined, undefined, undefined]
-          _handle_face_line(
-              geometry, vertices, normals, uvs,
-              [result[2], result[6], result[10], result[14]], //faces
-              [result[3], result[7], result[11], result[15]], //uv
-              [result[4], result[8], result[12], result[16]] //normal
+          _handle_face_line(geometry, vertices, normals, uvs, [result[2], result[6], result[10], result[14]], //faces
+          [result[3], result[7], result[11], result[15]], //uv
+          [result[4], result[8], result[12], result[16]] //normal
           );
 
         } else if ((result = face_pattern4.firstMatch(line)) != null) {
 
           // ["f 1//1 2//2 3//3", " 1//1", "1", "1", " 2//2", "2", "2", " 3//3", "3", "3", undefined, undefined, undefined]
-          _handle_face_line(
-            geometry, vertices, normals, uvs,
-            [result[2], result[5], result[8], result[11]], //faces
-            [], //uv
-            [result[3], result[6], result[9], result[12]] //normal
+          _handle_face_line(geometry, vertices, normals, uvs, [result[2], result[5], result[8], result[11]], [], //uv
+          [result[3], result[6], result[9], result[12]] //normal
           );
 
         } else if (line.contains(new RegExp(r"^o "))) {
@@ -172,8 +150,8 @@ class OBJLoader extends Loader {
           geometry = new Geometry();
           material = new MeshLambertMaterial();
 
-          mesh = new Mesh(geometry, material );
-          mesh.name = line.substring( 2 ).trim();
+          mesh = new Mesh(geometry, material);
+          mesh.name = line.substring(2).trim();
           object.add(mesh);
 
 
